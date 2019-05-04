@@ -13,6 +13,12 @@ public class GeneradorCS {
 		Task work=createTask();
 		generator=new LoadGenerator("Client - Server Load Test",numberOfTasks,work,gapBetweenTaks);
 		generator.generate();
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private Task createTask()
