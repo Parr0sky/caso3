@@ -1,7 +1,5 @@
-package Cliente;
+package cliente;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import javax.crypto.Cipher;

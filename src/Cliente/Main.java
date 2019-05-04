@@ -1,4 +1,4 @@
-package Cliente;
+package cliente;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -44,7 +44,7 @@ public class Main {
 	public static void main(String[] args){
 
 		String datos1=15+separador[0]+"44 11.4561"+separador[1]+"13 10.5974";
-		Cliente cliente=null;
+		Certificado cliente=null;
 		Socket socket=null;
 		String strUsuario="";
 		BufferedReader bf=null;
@@ -86,7 +86,7 @@ public class Main {
 						if(strServidor!= null && strServidor.equals(commands[2])){
 							System.out.println(strServidor);
 							//certificado del cliente
-							cliente=new Cliente();
+							cliente=new Certificado();
 							X509Certificate certCliente= cliente.getCertificado();
 
 							//envio certificado del cliente
@@ -128,7 +128,7 @@ public class Main {
 											{
 												String strDescifrado=Asimetrico.descifrarP(strServidor, certServer.getPublicKey());
 												if(strDescifrado.equals(sha))
-													System.out.println("Fin de la transacción");
+													System.out.println("Fin de la transacciï¿½n");
 											}
 										}
 										else if((strServidor=lector.readLine())!= null && strServidor.equals(commands[3])){
@@ -158,7 +158,7 @@ public class Main {
 
 
 
-		// cierre el socket y la entrada estándar
+		// cierre el socket y la entrada estï¿½ndar
 		try {
 			bf.close();
 			socket.close();

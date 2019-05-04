@@ -1,10 +1,11 @@
-package Cliente;
+package cliente;
 
 import javax.crypto.Cipher;
 
 import javax.crypto.SecretKey;
 
 public class Simetrico {
+	
 	private final static String PADDING="AES/ECB/PKCS5Padding";
 
 	public static String cifrar(SecretKey llave, String texto){
