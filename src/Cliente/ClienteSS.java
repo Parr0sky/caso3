@@ -31,7 +31,7 @@ public class ClienteSS {
 	public final static String HOST = "localhost";
 	public final static int PUERTO = 8080;
 
-	private static Socket socket;
+	private Socket socket;
 	private static PrintWriter escritor;
 	private static BufferedReader lector;
 	private static Scanner scanner;
