@@ -32,8 +32,8 @@ public class ClienteSS {
 	public final static int PUERTO = 8080;
 
 	private Socket socket;
-	private static PrintWriter escritor;
-	private static BufferedReader lector;
+	private  PrintWriter escritor;
+	private  BufferedReader lector;
 	private static Scanner scanner;
 	private static X509Certificate certificadoCliente;
 	private static X509Certificate certificadoServidor;
