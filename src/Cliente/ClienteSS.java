@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.management.ManagementFactory;
 import java.net.Socket;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -14,9 +15,13 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Scanner;
 
+import javax.management.Attribute;
+import javax.management.AttributeList;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 import javax.xml.bind.DatatypeConverter;
 
-public class MainSS {
+public class ClienteSS {
 
 	public final static String SERVIDOR = "SERVIDOR";
 	public final static String ALGORITMOS = "ALGORITMOS";
@@ -36,7 +41,17 @@ public class MainSS {
 	private static String simetrico;
 	private static String hmac;
 
-	public static void main(String[] args) {
+	public static int contadorTransacciones=0;
+	public static long sumaTiemposVerificacion=0l;
+	public static long sumaTiemposConsulta=0l;
+	public static double cantTomadaCpu=0;
+	public static double sumaTiempoCpu=0;
+
+
+	public ClienteSS() {
+		long tiempoVerificacion=-1l;
+		long tiempoConsulta=-1l;
+
 		try {
 			scanner = new Scanner(System.in);
 			parLlaves = crearLlavesAsimetricas();
@@ -77,7 +92,7 @@ public class MainSS {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
 			String llave = DatatypeConverter.printHexBinary(certificadoCliente.getPublicKey().getEncoded());
 
@@ -91,7 +106,7 @@ public class MainSS {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
 			escritor.println("OK");
 			System.out.println("Ingrese los datos que desea enviar:");
@@ -103,14 +118,14 @@ public class MainSS {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
 			String respuesta = lector.readLine();
 			System.out.println("Respuesta del servidor: " + respuesta);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
 			System.out.println("Se está cerrando la conexion");
 			lector.close(); 	
@@ -127,7 +142,7 @@ public class MainSS {
 		llaves.initialize(1024, new SecureRandom());
 		return llaves.generateKeyPair();
 	}
-	
+
 	public static String respuestaAlgoritmos() {
 		simetrico = null;
 		hmac = null;
@@ -166,6 +181,20 @@ public class MainSS {
 
 		String mensajeAServidor = ALGORITMOS + ":" + simetrico + ":" + RSA + ":" + hmac;
 		return mensajeAServidor;
+	}
+	public double getSystemCpuLoad() throws Exception {
+		MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+		ObjectName name = ObjectName.getInstance("java.lang:type=OperatingSystem");
+		AttributeList list = mbs.getAttributes(name, new String[]{ "SystemCpuLoad" });
+		if (list.isEmpty()) return Double.NaN;
+		Attribute att = (Attribute)list.get(0);
+		Double value = (Double)att.getValue();
+		// usually takes a couple of seconds before we get real values
+		if (value == -1.0) return Double.NaN;
+		// returns a percentage value with 1 decimal point precision
+		sumaTiempoCpu+=((int)(value * 1000) / 10.0);
+		cantTomadaCpu++;
+		return ((int)(value * 1000) / 10.0);
 	}
 
 }

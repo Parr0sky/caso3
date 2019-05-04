@@ -22,7 +22,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.bouncycastle.util.encoders.Base64;
 
-public class Main {
+public class ClienteCS {
 
     public final static String[] commands = {"HOLA", "ALGORITMOS", "OK", "ERROR"};
     public final static String[] separador = {";", ","};
@@ -41,7 +41,7 @@ public class Main {
         System.out.println(contenido[i] + " ");
     }
 
-    public static void main(String[] args) {
+    public ClienteCS() {
 
         String datos1 = 15 + separador[0] + "44 11.4561" + separador[1] + "13 10.5974";
         Cliente cliente = null;
