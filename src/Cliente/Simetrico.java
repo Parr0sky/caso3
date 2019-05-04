@@ -1,4 +1,4 @@
-package cliente;
+package Cliente;
 
 import javax.crypto.Cipher;
 
@@ -21,7 +21,20 @@ public class Simetrico {
 			return null;
 		}
 	}
-	
+
+	public static byte[] cifrarbt(SecretKey llave, byte[] texto){
+		byte[] textoCifrado;
+		try{
+			Cipher cifrador=Cipher.getInstance(PADDING);
+			byte[] textoClaro=texto;
+			cifrador.init(Cipher.ENCRYPT_MODE, llave);
+			textoCifrado=cifrador.doFinal(textoClaro);
+			return  textoCifrado;
+		}catch(Exception e){
+			System.out.println("Exception: "+e.getMessage());
+			return null;
+		}
+	}
 	
 	public static String descifrar(SecretKey llave, String txt){
 		byte[] txtBytes=txt.getBytes();

@@ -1,4 +1,4 @@
-package cliente;
+package Cliente;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -18,6 +18,18 @@ public class Asimetrico {
 		}
 	}
 
+	public static final byte[] cifrarBt(PublicKey kp, byte[] entrada) {
+		try {
+			Cipher cipher = Cipher.getInstance("RSA");
+			byte[] textoClaro = entrada;
+			cipher.init(Cipher.ENCRYPT_MODE, kp);
+			byte[] textoCifrado = cipher.doFinal(textoClaro);
+			return textoCifrado;
+		} catch (Exception e) {
+			System.err.println("Excepcion: " + e.getMessage());
+			return null;
+		}
+	}
 	public static final String descifrar(String txtOriginal, PrivateKey llave) throws Exception {
 
 		byte[] txt=txtOriginal.getBytes();

@@ -1,7 +1,7 @@
 /**
  * Parte del codigo fue tomado de http://www.bouncycastle.org/wiki/display/JA1/X.509+Public+Key+Certificate+and+Certification+Request+Generation
  */
-package cliente;
+package Cliente;
 
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
