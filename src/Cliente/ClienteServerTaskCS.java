@@ -2,7 +2,7 @@ package Cliente;
 
 import uniandes.gload.core.Task;
 
-public class ClienteServerTaskCS {
+public class ClienteServerTaskCS extends Task {
 
 	public void execute() {
 		try {

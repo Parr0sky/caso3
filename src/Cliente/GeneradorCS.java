@@ -17,13 +17,13 @@ public class GeneradorCS {
 
 	private Task createTask()
 	{
-		return new ClienteServerTaskSS();
+		return new ClienteServerTaskCS();
 	}
 
 
 	public static void main (String ... args)
 	{
 		@SuppressWarnings("unused")
-		GeneradorSS gen = new GeneradorSS();
+		GeneradorCS gen = new GeneradorCS();
 	}
 }

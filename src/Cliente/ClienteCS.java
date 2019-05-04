@@ -38,7 +38,7 @@ public class ClienteCS {
         for (; i < contenido.length - 1; i++) {
             System.out.print(contenido[i] + " ");
         }
-        System.out.println(contenido[i] + " ");
+
     }
 
     public ClienteCS() {
@@ -65,21 +65,21 @@ public class ClienteCS {
         }
 
 
-        System.out.println("Escriba el comando:");
+
         try {
-            strUsuario = bf.readLine();
-            if (strUsuario != "" && strUsuario != null) {
-                if (strUsuario.equalsIgnoreCase(commands[0])) {
+           // strUsuario = bf.readLine();
+        //    if (strUsuario != "" && strUsuario != null) {
+                if (/*strUsuario.equalsIgnoreCase(commands[0])*/true) {
                     pw.println(commands[0]);
                     strServidor = lector.readLine();
-                    System.out.println(strServidor);
-                    System.out.println("Escriba el comando");
+
+
                     if (strServidor != null && strServidor.equals(commands[2])) {
                     	String algs = commands[1] + separadorAlgoritmo + ALGs + separadorAlgoritmo + ALGa + separadorAlgoritmo + ALGhmac;
                         pw.println(algs);
                         strServidor = lector.readLine();
                         if (strServidor != null && strServidor.equals(commands[2])) {
-                            System.out.println(strServidor);
+
                             //certificado del cliente
                             cliente = new Cliente();
                             X509Certificate certCliente = cliente.getCertificado();
@@ -102,7 +102,7 @@ public class ClienteCS {
 
                                 KeyGenerator keygen = KeyGenerator.getInstance(ALGs);
                                 SecretKey secretKey = keygen.generateKey();
-                                System.out.println(secretKey.getEncoded());
+
                                 pw.println(DatatypeConverter.printHexBinary(Asimetrico.cifrarBt(pk, secretKey.getEncoded())));
                                 //recibir llave cifrada
                                 if ((strServidor = lector.readLine()) != null) {
@@ -111,10 +111,10 @@ public class ClienteCS {
 									if(Asimetrico.descifrarBtp(DatatypeConverter.parseHexBinary(strServidor),certCliente.getPublicKey()).equals(secretKey.getEncoded()))
 									{
 
-										System.out.println("Confirmed key pair, continue");
+
 									}
 									else {
-										System.out.println("Key failed , terminating");
+
 									}*/
 
 
@@ -133,13 +133,13 @@ public class ClienteCS {
 
                             }
                         } else if ((strServidor = lector.readLine()) != null && strServidor.equals(commands[3])) {
-                            System.out.println("error en el envio de algoritmos");
+
                         }
                     }
 
                 }
 
-            }
+            //}
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
