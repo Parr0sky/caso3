@@ -23,6 +23,14 @@ import javax.xml.bind.DatatypeConverter;
 
 public class ClienteSS {
 
+	public final static String[] commands = {"HOLA", "ALGORITMOS", "OK", "ERROR"};
+	public final static String[] separador = {";", ","};
+	public final static String separadorAlgoritmo = ":";
+	public final static String ALGs = "AES";
+	public final static String ALGa = "RSA";
+	public final static String ALGhmac = "HMACSHA1";
+	public static final String DIRECCION = "localhost";
+
 	public final static String SERVIDOR = "SERVIDOR";
 	public final static String ALGORITMOS = "ALGORITMOS";
 	public final static String RSA = "RSA";
@@ -34,7 +42,6 @@ public class ClienteSS {
 	private Socket socket;
 	private  PrintWriter escritor;
 	private  BufferedReader lector;
-	private static Scanner scanner;
 	private static X509Certificate certificadoCliente;
 	private static X509Certificate certificadoServidor;
 	private static KeyPair parLlaves;
@@ -53,7 +60,6 @@ public class ClienteSS {
 		long tiempoConsulta=-1l;
 
 		try {
-			scanner = new Scanner(System.in);
 			parLlaves = crearLlavesAsimetricas();
 			certificadoCliente = Certificado.generarV3Certificado(parLlaves);
 		} catch (Exception e) {
@@ -72,11 +78,10 @@ public class ClienteSS {
 		try {
 			escritor.println("HOLA");
 			String respuesta = lector.readLine();
-			System.out.println("Respuesta del servidor: " + respuesta);
+			String algs = commands[1] + separadorAlgoritmo + ALGs + separadorAlgoritmo + ALGa + separadorAlgoritmo + ALGhmac;
 
-			escritor.println(respuestaAlgoritmos());
+			escritor.println(algs);
 			respuesta = lector.readLine();
-			System.out.println("Respuesta del servidor: " + respuesta);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -88,7 +93,7 @@ public class ClienteSS {
 
 			byte[] certificadoDelServidor = DatatypeConverter.parseHexBinary(lector.readLine());
 			certificadoServidor = (X509Certificate)CertificateFactory.getInstance("X.509").generateCertificate(new ByteArrayInputStream(certificadoDelServidor));
-			System.out.println("Certificado del Servidor: "+certificadoServidor.toString() + "\n");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -110,10 +115,8 @@ public class ClienteSS {
 		try {
 			escritor.println("OK");
 			System.out.println("Ingrese los datos que desea enviar:");
-			String datos = scanner.nextLine();
-
+			String datos = 15 + separador[0] + "44 11.4561" + separador[1] + "13 10.5974";
 			escritor.println(datos);
-
 			escritor.println(datos);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -121,15 +124,12 @@ public class ClienteSS {
 
 		try {
 			String respuesta = lector.readLine();
-			System.out.println("Respuesta del servidor: " + respuesta);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		try {
-			System.out.println("Se está cerrando la conexion");
-			lector.close(); 	
-			scanner.close();
+			lector.close();
 			socket.close();
 			escritor.close();
 		} catch (Exception e) {e.printStackTrace();
@@ -146,39 +146,7 @@ public class ClienteSS {
 	public static String respuestaAlgoritmos() {
 		simetrico = null;
 		hmac = null;
-		boolean acepto = false;
-		while(!acepto) {
-			System.out.println("Seleccione los algoritmos que se van a utilizar: ");
-			System.out.println("1. Algoritmos Simétricos disponibles (ALGs): AES, Blowfish");
-
-			simetrico = scanner.nextLine();
-
-			if(simetrico.equals("AES") || simetrico.equals("BLOWFISH")) {
-				acepto = true;
-				System.out.println("Algoritmo aceptado");
-			}
-			else {
-				System.out.println("El algoritmo seleccionado no es valido.");
-			}
-		}
-
-		System.out.println("2. Algoritmos Asimétricos a utilizar: RSA");
-
-		acepto = false;
-		while(!acepto) {
-			System.out.println("3. HMAC disponibles: HMACSHA1, HMACSHA256, HMACSHA384, HMACSHA512");
-
-			hmac = scanner.nextLine();
-
-			if(hmac.equals("HMACSHA1") || hmac.equals("HMACSHA256") || hmac.equals("HMACSHA384") || hmac.equals("HMACSHA512")) {
-				acepto = true;
-				System.out.println("Algoritmo aceptado");
-			}
-			else {
-				System.out.println("El algoritmo seleccionado no es valido.");
-			}
-		}
-
+		hmac = "HMACSHA1";
 		String mensajeAServidor = ALGORITMOS + ":" + simetrico + ":" + RSA + ":" + hmac;
 		return mensajeAServidor;
 	}

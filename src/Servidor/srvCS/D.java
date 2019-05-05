@@ -37,9 +37,13 @@ public class D extends Thread {
 	private byte[] mybyte;
 	private static X509Certificate certSer;
 	private static KeyPair keyPairServidor;
-	
+	public  static double failed;
+	public static double time;
+
+
 	public D (Socket csP, int idP) {
 		sc = csP;
+		failed=0;
 		dlg = new String("delegado " + idP + ": ");
 		try {
 		mybyte = new byte[520]; 
@@ -174,10 +178,14 @@ public class D extends Thread {
 		        long totalSum= (System.currentTimeMillis()-startTime);
 		        System.out.println(dlg + "Termino exitosamente.");
 		        System.out.println("Uso de CPU: "+cpuTot);
+		        C.registerTime(totalSum);
+		        C.registerCPUUsage(cpuTot);
 		        System.out.println("Tiempo de ejecucion: "+totalSum);
+		        time=totalSum;
 				
 	        } catch (Exception e) {
-	          e.printStackTrace();
+	        	C.registerLostTransaction();
+	          	e.printStackTrace();
 	        }
 	}
 	
@@ -193,7 +201,7 @@ public class D extends Thread {
 
 	    MBeanServer mbs    = ManagementFactory.getPlatformMBeanServer();
 	    ObjectName name    = ObjectName.getInstance("java.lang:type=OperatingSystem");
-	    AttributeList list = mbs.getAttributes(name, new String[]{ "ProcessCpuLoad" });
+	    AttributeList list = mbs.getAttributes(name, new String[]{ "SystemCpuLoad" });
 
 	    if (list.isEmpty())     return Double.NaN;
 

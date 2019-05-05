@@ -1,8 +1,6 @@
 package Servidor.srvCS;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.KeyPair;
@@ -10,12 +8,14 @@ import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class C {
 	private static ServerSocket ss;	
 	private static final String MAESTRO = "MAESTRO: ";
 	private static X509Certificate certSer; /* acceso default */
 	private static KeyPair keyPairServidor; /* acceso default */
+
 
 	/**
 	 * @param args
@@ -40,24 +40,82 @@ public class C {
 		//Crea el pool
 		System.out.println("Introduzca el tamanio del pool");
 		int tamThread=Integer.parseInt(br.readLine());
-		ExecutorService exec = Executors.newFixedThreadPool(tamThread);
+		ThreadPoolExecutor exec = (ThreadPoolExecutor) Executors.newFixedThreadPool(tamThread);
+
 		System.out.println(MAESTRO + "Se creao pool de tamanio "+ tamThread);
 
 		keyPairServidor = S.grsa();
 		certSer = S.gc(keyPairServidor);
+		double failed=0;
+		double time=0;
+		double executions=0;
 		D.initCertificate(certSer, keyPairServidor);
 		while (true) {
-			try { 
+			System.out.println("Elemnts in queue: "+exec.getQueue().size());
+			try {
 				Socket sc = ss.accept();
 				System.out.println(MAESTRO + "Cliente " + idThread + " aceptado.");
-				//D d = new D(sc,idThread);
-				exec.execute(new D(sc,idThread));
+				D d = new D(sc,idThread);
+				exec.execute(d);
 				idThread++;
 				//d.start();
 			} catch (IOException e) {
 				System.out.println(MAESTRO + "Error creando el socket cliente.");
 				e.printStackTrace();
 			}
+
+		}
+	}
+
+	public static void registerTime(double time)
+	{
+		try {
+			File file= new File("./timesCS.csv");
+			if(!file.exists())
+			{
+				file.createNewFile();
+			}
+			PrintWriter pr = new PrintWriter(new FileWriter(file,true));
+			pr.println(time);
+			pr.close();
+		}
+		catch (Exception e)
+		{
+
+		}
+	}
+	public static void  registerCPUUsage(double cpu)
+	{
+		try {
+			File file= new File("./cpuCS.csv");
+			if(!file.exists())
+			{
+				file.createNewFile();
+			}
+			PrintWriter pr = new PrintWriter(new FileWriter(file,true));
+			pr.println(cpu);
+			pr.close();
+		}
+		catch (Exception e)
+		{
+
+		}
+	}
+	public static void registerLostTransaction()
+	{
+		try {
+			File file= new File("./lostCS.csv");
+			if(!file.exists())
+			{
+				file.createNewFile();
+			}
+			PrintWriter pr = new PrintWriter(new FileWriter(file,true));
+			pr.println("failed");
+			pr.close();
+		}
+		catch (Exception e)
+		{
+
 		}
 	}
 }

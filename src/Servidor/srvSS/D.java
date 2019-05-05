@@ -175,8 +175,11 @@ public class D extends Thread {
 			System.out.println(dlg + "Termino exitosamente.");
 			System.out.println("Uso de CPU: "+cpuTot);
 			System.out.println("Tiempo de ejecucion: "+totalSum);
+			C.registerTime(totalSum);
+			C.registerCPUUsage(cpuTot);
 
 		} catch (Exception e) {
+			C.registerLostTransaction();
 			try {
 				sc.close();
 			} catch (Exception e2) { e2.printStackTrace(); }
